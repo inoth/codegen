@@ -27,8 +27,8 @@ var (
 
 func init() {
 	flag.StringVar(&dbConStr, "db", "", "database connect string 数据库连接串")
-	flag.StringVar(&projectName, "pn", "DefualtProject", "project name 项目名称")
-	flag.StringVar(&tableName, "tbls", "", "tables; tableA,tableB,tableC 需要单独生成表名称，默认全表")
+	flag.StringVar(&projectName, "name", "DefualtProject", "project name 项目名称")
+	flag.StringVar(&tableName, "t", "", "tables; --t='tableA,tableB,tableC' 需要单独生成表名称，默认全表")
 	flag.IntVar(&fmtDbName, "f", 0, "defualt:0；是否格式化处理数据命名格式，1：处理，0：不处理")
 	flag.Parse()
 }
