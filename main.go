@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	MaxHandle = 100
+	HandleLimit = 100
 )
 
 var (
@@ -76,7 +76,7 @@ func main() {
 	ch_progress := make(chan string, tn)
 
 	for k, table := range tables {
-		if k > 0 && k%MaxHandle == 0 {
+		if k > 0 && k%HandleLimit == 0 {
 			time.Sleep(time.Second * 1)
 		}
 		log.Infof("开始处理%v", table.TableName)
