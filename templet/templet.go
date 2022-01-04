@@ -237,7 +237,7 @@ func (e *EntityHandle) Process(wg *sync.WaitGroup, tableName string) {
 	}
 	data.Fields = make([]Field, len(cols))
 	for i, col := range cols {
-		data.Fields[i] = Field{DbType: col.DataType,
+		data.Fields[i] = Field{DbType: MatchType(col.DataType),
 			DbField: col.ColName,
 			Field:   NameHandler(col.ColName),
 			Desc:    col.ColDesc}
