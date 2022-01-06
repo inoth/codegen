@@ -2,6 +2,7 @@ package db
 
 import (
 	"log"
+	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -26,5 +27,16 @@ func InitDatabase(constr string) {
 		log.Fatal(err.Error())
 		panic(err)
 	}
+
+	sqldb, err := db.DB()
+	if err != nil {
+		log.Fatal(err.Error())
+		panic(err)
+	}
+
+	sqldb.SetConnMaxIdleTime(10)
+	sqldb.SetMaxOpenConns(100)
+	sqldb.SetConnMaxLifetime(time.Second * 180)
+
 	DB = db
 }
