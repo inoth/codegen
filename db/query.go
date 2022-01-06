@@ -18,6 +18,6 @@ func GetTables(dbName string) []TableInfo {
 
 func GetColumns(dbName, tableName string) []ColumnsInfo {
 	var cols []ColumnsInfo
-	DB.Raw("SELECT COLUMN_NAME as ColName,DATA_TYPE as DataType,COLUMN_COMMENT as ColDesc FROM INFORMATION_SCHEMA.`COLUMNS` WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?", dbName, tableName).Scan(&cols)
+	DB.Raw("SELECT COLUMN_NAME as ColName,DATA_TYPE as DataType,COLUMN_COMMENT as ColDesc,IS_NULLABLE AS `IsNull`,COLUMN_KEY AS `Key` FROM INFORMATION_SCHEMA.`COLUMNS` WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?", dbName, tableName).Scan(&cols)
 	return cols
 }
