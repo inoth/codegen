@@ -74,13 +74,13 @@ func main() {
 	t1 := time.Now()
 	log.Info("开始执行表对应实体生成....")
 	ch_progress := make(chan string, tn)
+	// 并行处理最大限制
+	ch_limit := make(chan int, HandleLimit)
 
-	for k, table := range tables {
-		if k > 0 && k%HandleLimit == 0 {
-			time.Sleep(time.Second * 1)
-		}
+	for _, table := range tables {
+		ch_limit <- 0
 		log.Infof("开始处理%v", table.TableName)
-		go handle.HandlerTable(context.Background(), ch_progress, table)
+		go handle.HandlerTable(context.Background(), ch_progress, ch_limit, table)
 	}
 
 	curProgress := 0

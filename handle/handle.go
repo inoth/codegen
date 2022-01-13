@@ -26,7 +26,7 @@ func CreateFolder(projectName string) {
 	}
 }
 
-func HandlerTable(ctx context.Context, ch_progress chan string, table db.TableInfo) {
+func HandlerTable(ctx context.Context, ch_progress chan string, ch_limit chan int, table db.TableInfo) {
 	wg := sync.WaitGroup{}
 	for _, temp := range templet.FileTemplate {
 		wg.Add(1)
@@ -34,5 +34,6 @@ func HandlerTable(ctx context.Context, ch_progress chan string, table db.TableIn
 	}
 	wg.Wait()
 	ch_progress <- fmt.Sprintf("%v 处理完成", table.TableName)
+	<-ch_limit
 	return
 }
