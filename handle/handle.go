@@ -26,7 +26,7 @@ func CreateFolder(projectName string) {
 	}
 }
 
-func HandlerTable(ctx context.Context, ch_progress chan string, ch_limit chan int, table db.TableInfo) {
+func HandlerTable(ctx context.Context, ch_progress chan string, ch_limit chan struct{}, table db.TableInfo) {
 	wg := sync.WaitGroup{}
 	for _, temp := range templet.FileTemplate {
 		wg.Add(1)

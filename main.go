@@ -75,10 +75,10 @@ func main() {
 	log.Info("开始执行表对应实体生成....")
 	ch_progress := make(chan string, tn)
 	// 并行处理最大限制
-	ch_limit := make(chan int, HandleLimit)
+	ch_limit := make(chan struct{}, HandleLimit)
 
 	for _, table := range tables {
-		ch_limit <- 0
+		ch_limit <- struct{}{}
 		log.Infof("开始处理%v", table.TableName)
 		go handle.HandlerTable(context.Background(), ch_progress, ch_limit, table)
 	}
