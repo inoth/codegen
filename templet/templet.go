@@ -29,40 +29,12 @@ func init() {
 	DataTypeMap["decimal"] = "decimal"
 	DataTypeMap["int"] = "int"
 	DataTypeMap["tinyint"] = "int"
-	DataTypeMap["datetime"] = "DateTime"
+	DataTypeMap["datetime"] = "time.Time"
 
 	FileTemplate = make(map[string]IHandler)
-	FileTemplate["Entity"] = &EntityHandle{
-		Folder: "Entity",
-		Tmpl:   Entity}
-
 	FileTemplate["Model"] = &EntityHandle{
 		Folder: "Model",
 		Tmpl:   Model}
-
-	FileTemplate["AutoMapper"] = &EntityHandle{
-		Folder: "AutoMapper",
-		Tmpl:   Mapper}
-
-	FileTemplate["IRepository"] = &NormalHandle{
-		Folder: "IRepository",
-		Tmpl:   IRepository}
-
-	FileTemplate["Repository"] = &NormalHandle{
-		Folder: "Repository",
-		Tmpl:   Repository}
-
-	FileTemplate["IService"] = &NormalHandle{
-		Folder: "IService",
-		Tmpl:   IService}
-
-	FileTemplate["Service"] = &NormalHandle{
-		Folder: "Service",
-		Tmpl:   Service}
-
-	FileTemplate["Controller"] = &NormalHandle{
-		Folder: "Controller",
-		Tmpl:   Controller}
 }
 
 type TmplData struct {
@@ -103,7 +75,7 @@ func (e *NormalHandle) Process(wg *sync.WaitGroup, tableName string) {
 		DbTableName: tableName,
 		UseDbName:   useDbName,
 	}
-	path := fmt.Sprintf("./%v/%v/%v%v.cs", projectName, e.Folder, NameHandler(tableName), e.Folder)
+	path := fmt.Sprintf("./%v/%v/%v.go", projectName, e.Folder, tableName)
 	err = util.CreateFileBytes(path, func(f *os.File) error {
 		e := tmpl.Execute(f, data)
 		if e != nil {
@@ -147,7 +119,7 @@ func (e *EntityHandle) Process(wg *sync.WaitGroup, tableName string) {
 			Field:   NameHandler(col.ColName),
 			Desc:    col.ColDesc}
 	}
-	path := fmt.Sprintf("./%v/%v/%v%v.cs", projectName, e.Folder, NameHandler(tableName), e.Folder)
+	path := fmt.Sprintf("./%v/%v/%v.go", projectName, e.Folder, tableName)
 	err = util.CreateFileBytes(path, func(f *os.File) error {
 		e := tmpl.Execute(f, data)
 		if e != nil {
