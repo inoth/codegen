@@ -1,4 +1,4 @@
-module codegen
+module github.com/inoth/codegen
 
 go 1.16
 
