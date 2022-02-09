@@ -1,14 +1,15 @@
 package handle
 
 import (
-	"codegen/db"
-	"codegen/templet"
-	"codegen/util"
 	"context"
 	"fmt"
 	"log"
 	"os"
 	"sync"
+
+	"github.com/inoth/codegen/db"
+	"github.com/inoth/codegen/templet"
+	"github.com/inoth/codegen/util"
 )
 
 func CreateFolder(projectName string) {

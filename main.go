@@ -1,15 +1,16 @@
 package main
 
 import (
-	"codegen/db"
-	"codegen/handle"
-	"codegen/templet"
 	"context"
 	"flag"
 	"os"
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/inoth/codegen/db"
+	"github.com/inoth/codegen/handle"
+	"github.com/inoth/codegen/templet"
 
 	log "github.com/sirupsen/logrus"
 )

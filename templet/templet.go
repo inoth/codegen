@@ -1,10 +1,11 @@
 package templet
 
 import (
-	"codegen/db"
-	"codegen/util"
 	"os"
 	"text/template"
+
+	"github.com/inoth/codegen/db"
+	"github.com/inoth/codegen/util"
 
 	"fmt"
 	"unicode"

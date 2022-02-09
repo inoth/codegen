@@ -1,10 +1,11 @@
 package test
 
 import (
-	"codegen/db"
 	"regexp"
 	"testing"
 	"time"
+
+	"github.com/inoth/codegen/db"
 )
 
 func TestGetTables(t *testing.T) {
