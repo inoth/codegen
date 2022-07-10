@@ -1,0 +1,15 @@
+#!/bin/sh
+FROM alpine@sha256:c74f1b1166784193ea6c8f9440263b9be6cae07dfe35e32a5df7a31358ac2060
+LABEL maintainer = "inoth" version = "v1.0" description = "codegenfornet"
+EXPOSE 8888
+WORKDIR /
+
+RUN apk add --no-cache bash
+RUN apk --no-cache add ca-certificates
+ENV GIN_MODE=release
+
+COPY /release/. .
+
+RUN chmod +x /codegenfornet
+ENTRYPOINT ["/codegenfornet"]
+

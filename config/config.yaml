@@ -1,0 +1,13 @@
+ServerPort: :8888
+ServerName: codegenfornet
+
+
+ZapLog:
+  ErrLog: log/err.log
+  WarnLog: log/warn.log
+  InfoLog: log/info.log
+  Maxsize: 100
+  MaxAge: 15
+  MaxBackup: 30
+  Compress: true
+  Json: true
