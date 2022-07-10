@@ -14,7 +14,7 @@ func AddCrawl(key string, crawl plugin.DbStructureGet) {
 func GetCrawl(db string) (plugin.DbStructureGet, error) {
 	r, ok := crawlMap[db]
 	if !ok {
-		return nil, errors.New("该类型数据库尚未支持")
+		return nil, errors.New("尚未支持的数据库")
 	}
 	return r, nil
 }
