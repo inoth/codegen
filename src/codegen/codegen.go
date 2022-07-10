@@ -44,6 +44,8 @@ var TableUnionFile = map[string]struct{}{
 	"Controller.cs": {},
 }
 
+var handleLimit = 100
+
 func (cg *CodegenForNet) ServeStart() error {
 	var tables []plugin.Tables
 	if cg.SourceDb {
@@ -125,11 +127,17 @@ func (cg *CodegenForNet) ServeStart() error {
 		} else {
 			// 需要与表一对一生成的文件
 			wg := &sync.WaitGroup{}
+			ch_run := make(chan struct{}, handleLimit)
 			for _, table := range tables {
 				wg.Add(1)
+				ch_run <- struct{}{}
+
 				fmt.Printf("开始渲染：%v\n", table.TableName)
 				go func(s_fileName, s_path, s_tmplContent, s_table string) {
-					defer wg.Done()
+					defer func() {
+						<-ch_run
+						wg.Done()
+					}()
 					err := cg.genTableFile(s_fileName, s_path, s_tmplContent, s_table)
 					if err != nil {
 						fmt.Printf("%v\n", err)
