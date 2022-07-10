@@ -37,6 +37,8 @@ var initCmd = &cobra.Command{
 					Host:   dbhost,
 					DbName: databaseName,
 				})
+			default:
+				panic("该数据库尚未支持")
 			}
 		}
 
