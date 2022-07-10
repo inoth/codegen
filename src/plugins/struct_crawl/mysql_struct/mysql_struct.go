@@ -2,8 +2,8 @@ package mysql_struct
 
 import (
 	"codegenfornet/components/db"
-	plugin "codegenfornet/src/Plugin"
-	"codegenfornet/src/Plugin/struct_crawl"
+	plugin "codegenfornet/src/plugins"
+	"codegenfornet/src/plugins/struct_crawl"
 	"fmt"
 )
 

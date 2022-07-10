@@ -2,8 +2,9 @@ package codegen
 
 import (
 	"archive/zip"
-	plugin "codegenfornet/src/Plugin"
-	"codegenfornet/src/Plugin/struct_crawl"
+
+	plugin "codegenfornet/src/plugins"
+	"codegenfornet/src/plugins/struct_crawl"
 	"codegenfornet/util"
 	"errors"
 	"fmt"

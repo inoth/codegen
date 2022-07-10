@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"codegenfornet/cmd"
-	_ "codegenfornet/src/Plugin/struct_crawl/all"
+	_ "codegenfornet/src/plugins/struct_crawl/all"
 )
 
 func main() {

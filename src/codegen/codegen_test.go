@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	_ "codegenfornet/src/Plugin/struct_crawl/all"
+	_ "codegenfornet/src/plugins/struct_crawl/all"
 )
 
 func TestCodegen(t *testing.T) {

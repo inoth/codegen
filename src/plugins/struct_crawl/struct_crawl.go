@@ -1,7 +1,7 @@
 package struct_crawl
 
 import (
-	plugin "codegenfornet/src/Plugin"
+	plugin "codegenfornet/src/plugins"
 	"errors"
 )
 
