@@ -30,12 +30,20 @@ type TableTempData struct {
 	TableName   string
 	ProjectName string
 	DbName      string
+	PKList      []TableField
 	Fields      []TableField
 }
 type TableField struct {
+	IsPK  string
 	Type  string
 	Field string
 	Desc  string
+}
+
+type TableList struct {
+	ProjectName string
+	DbName      string
+	Tables      []string
 }
 
 // 需要根据表生成多个的文件
@@ -43,6 +51,12 @@ var TableUnionFile = map[string]struct{}{
 	"Request.cs":    {},
 	"Service.cs":    {},
 	"Controller.cs": {},
+	"Model.cs":      {},
+}
+
+// 单文件内表信息生成
+var TableFieldOnce = map[string]struct{}{
+	"Context.cs": {},
 }
 
 var handleLimit = 100
@@ -102,30 +116,8 @@ func (cg *CodegenForNet) ServeStart() error {
 
 		tmplContent, _ := ioutil.ReadAll(fr)
 		fileName := item.FileInfo().Name()
-		// 只需要执行一次生成的文件
-		if _, ok := TableUnionFile[fileName]; !ok {
-			// fmt.Printf("一次性模板文件:%v -> %v\n", fileName, path)
-			tmplData := &TableTempData{
-				ProjectName: cg.ProjectName,
-				DbName:      cg.DbName,
-			}
-			tmpl, err := template.New(fileName).Parse(string(tmplContent))
-			if err != nil {
-				fmt.Printf("%v\n", err)
-				return err
-			}
-			err = util.CreateFileBytes(path, func(f *os.File) error {
-				e := tmpl.Execute(f, tmplData)
-				if e != nil {
-					return e
-				}
-				return nil
-			})
-			if err != nil {
-				fmt.Printf("%v\n", err)
-			}
 
-		} else {
+		if _, ok := TableUnionFile[fileName]; ok {
 			// 需要与表一对一生成的文件
 			wg := &sync.WaitGroup{}
 			ch_run := make(chan struct{}, handleLimit)
@@ -146,6 +138,52 @@ func (cg *CodegenForNet) ServeStart() error {
 				}(fileName, path, string(tmplContent), table.TableName)
 			}
 			wg.Wait()
+		} else if _, ok := TableFieldOnce[fileName]; ok {
+			tmplData := &TableList{
+				ProjectName: cg.ProjectName,
+				DbName:      cg.DbName,
+				Tables:      make([]string, 0),
+			}
+			for _, t := range tables {
+				tmplData.Tables = append(tmplData.Tables, nameHandler(t.TableName))
+			}
+			tmpl, err := template.New(fileName).Parse(string(tmplContent))
+			if err != nil {
+				fmt.Printf("%v\n", err)
+				return err
+			}
+			path = strings.Replace(path, fileName, nameHandler(tmplData.DbName)+fileName, -1)
+			err = util.CreateFileBytes(path, func(f *os.File) error {
+				e := tmpl.Execute(f, tmplData)
+				if e != nil {
+					return e
+				}
+				return nil
+			})
+			if err != nil {
+				fmt.Printf("%v\n", err)
+			}
+		} else {
+			// fmt.Printf("一次性模板文件:%v -> %v\n", fileName, path)
+			tmplData := &TableTempData{
+				ProjectName: cg.ProjectName,
+				DbName:      cg.DbName,
+			}
+			tmpl, err := template.New(fileName).Parse(string(tmplContent))
+			if err != nil {
+				fmt.Printf("%v\n", err)
+				return err
+			}
+			err = util.CreateFileBytes(path, func(f *os.File) error {
+				e := tmpl.Execute(f, tmplData)
+				if e != nil {
+					return e
+				}
+				return nil
+			})
+			if err != nil {
+				fmt.Printf("%v\n", err)
+			}
 		}
 	}
 	return nil
@@ -169,12 +207,22 @@ func (cg *CodegenForNet) genTableFile(fileName, path, tmplContent, table string)
 
 		columns := cg.carwl.GetColumns(cg.DbName, table)
 		tmplData.Fields = make([]TableField, len(columns))
+		tmplData.PKList = make([]TableField, 0)
 
 		for i := 0; i < len(columns); i++ {
+			if columns[i].Key == "PRI" {
+				tmplData.PKList = append(tmplData.PKList, TableField{
+					Type:  cg.carwl.TypeSwitch(columns[i].Type),
+					Field: nameHandler(columns[i].Field),
+					Desc:  columns[i].Desc,
+					IsPK:  columns[i].Key,
+				})
+			}
 			tmplData.Fields[i] = TableField{
 				Type:  cg.carwl.TypeSwitch(columns[i].Type),
 				Field: nameHandler(columns[i].Field),
 				Desc:  columns[i].Desc,
+				IsPK:  columns[i].Key,
 			}
 		}
 

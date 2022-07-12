@@ -20,7 +20,7 @@ type MysqlCrawl struct{}
 
 func (mc MysqlCrawl) GetTables(dbName string) []plugin.Tables {
 	var tables []plugin.Tables
-	err := db.DB.Raw("SELECT TABLE_NAME as `TableName` FROM INFORMATION_SCHEMA.`TABLES` WHERE TABLE_SCHEMA = ?", dbName).Scan(&tables).Error
+	err := db.DB.Raw("SELECT TABLE_NAME as `TableName`,TABLE_COMMENT as `Desc` FROM INFORMATION_SCHEMA.`TABLES` WHERE TABLE_SCHEMA = ?", dbName).Scan(&tables).Error
 	if err != nil {
 		fmt.Println(err.Error())
 	}

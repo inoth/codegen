@@ -12,6 +12,7 @@ type Tables struct {
 }
 
 type Columns struct {
+	Key    string
 	Field  string
 	Type   string
 	Desc   string
